@@ -864,3 +864,157 @@ start();
 </script>
 
 </body></html>
+// ============================================================
+//  УПРАВЛЕНИЕ НЕСКОЛЬКИМИ АККАУНТАМИ
+// ============================================================
+
+// 1. ПОКАЗАТЬ ВСЕ АККАУНТЫ
+async function showAccounts() {
+    const users = await DB.getUsers();
+    const accountList = Object.keys(users);
+    
+    if (accountList.length === 0) {
+        showToast('❌ Нет сохранённых аккаунтов', 'error');
+        return;
+    }
+    
+    // Создаём модальное окно
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = `
+        <div class="modal-box">
+            <div class="modal-head">
+                <h2>👥 Управление аккаунтами</h2>
+                <button class="modal-close" onclick="this.closest('.modal').remove()">✕</button>
+            </div>
+            <div style="margin-bottom:12px;">
+                <p style="color:var(--text2);font-size:13px;">Всего аккаунтов: <strong>${accountList.length}</strong></p>
+            </div>
+            <div id="accountList" style="display:flex;flex-direction:column;gap:8px;max-height:300px;overflow-y:auto;">
+                ${accountList.map(name => `
+                    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--bg3);border-radius:var(--radius-sm);border:1px solid var(--border);">
+                        <span style="font-weight:600;">${esc(name)} ${currentUser === name ? '✅' : ''}</span>
+                        <div style="display:flex;gap:6px;">
+                            ${currentUser !== name ? `<button onclick="switchToAccount('${name}')" class="secondary" style="padding:4px 12px;font-size:12px;">🔓 Войти</button>` : ''}
+                            <button onclick="deleteAccount('${name}')" class="danger-btn" style="padding:4px 12px;font-size:12px;">🗑</button>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+            <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+                <button onclick="this.closest('.modal').remove()" class="secondary" style="flex:1;">Закрыть</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+    resetAutoLockTimer();
+}
+
+// 2. ПЕРЕКЛЮЧЕНИЕ НА ДРУГОЙ АККАУНТ
+async function switchToAccount(username) {
+    if (!confirm(`Переключиться на аккаунт "${username}"?`)) return;
+    
+    const password = prompt(`Введите пароль для "${username}":`);
+    if (!password) return;
+    
+    try {
+        const result = await DB.login(username, password);
+        if (result.success) {
+            // Закрываем модальное окно
+            document.querySelector('.modal')?.remove();
+            
+            // Обновляем текущего пользователя
+            currentUser = username;
+            userData = result.data;
+            encryptionKey = result.key;
+            unlocked = true;
+            
+            showToast(`✅ Переключено на "${username}"`, 'success');
+            renderApp();
+            resetAutoLockTimer();
+        } else {
+            showToast('❌ ' + result.error, 'error');
+        }
+    } catch (e) {
+        showToast('❌ Ошибка: ' + e.message, 'error');
+    }
+}
+
+// 3. УДАЛЕНИЕ АККАУНТА
+async function deleteAccount(username) {
+    if (username === currentUser) {
+        if (!confirm(`Ты сейчас в аккаунте "${username}". Удалить его и выйти?`)) return;
+    } else {
+        if (!confirm(`Удалить аккаунт "${username}"? Данные будут потеряны безвозвратно!`)) return;
+    }
+    
+    const users = await DB.getUsers();
+    if (!users[username]) {
+        showToast('❌ Аккаунт не найден', 'error');
+        return;
+    }
+    
+    delete users[username];
+    await DB.saveUsers(users);
+    
+    // Закрываем модальное окно
+    document.querySelector('.modal')?.remove();
+    
+    if (username === currentUser) {
+        // Если удалили текущий аккаунт — выходим
+        await logout();
+        showToast('🗑 Аккаунт удалён', 'warning');
+    } else {
+        showToast(`🗑 Аккаунт "${username}" удалён`, 'warning');
+        // Обновляем список
+        showAccounts();
+    }
+}
+
+// 4. ДОБАВЛЯЕМ КНОПКУ В МЕНЮ
+function addAccountsButton() {
+    const nav = document.querySelector('.nav');
+    if (!nav) return;
+    
+    // Проверяем, есть ли уже кнопка "Аккаунты"
+    if (nav.querySelector('[data-section="accounts"]')) return;
+    
+    const btn = document.createElement('button');
+    btn.dataset.section = 'accounts';
+    btn.innerHTML = '<span class="nav-icon">👥</span>Аккаунты';
+    btn.onclick = function() {
+        document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        showAccounts();
+    };
+    
+    // Вставляем перед кнопкой "Настройки"
+    const settingsBtn = nav.querySelector('[data-section="settings"]');
+    if (settingsBtn) {
+        nav.insertBefore(btn, settingsBtn);
+    } else {
+        nav.appendChild(btn);
+    }
+    
+    // Обновляем сетку
+    const totalBtns = nav.querySelectorAll('button').length;
+    nav.style.gridTemplateColumns = `repeat(${totalBtns}, 1fr)`;
+}
+
+// 5. ДОБАВЛЯЕМ ГОРЯЧИЕ КЛАВИШИ
+document.addEventListener('keydown', function(e) {
+    // Ctrl+Shift+A — открыть список аккаунтов
+    if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+        e.preventDefault();
+        showAccounts();
+    }
+});
+
+// 6. ПРИМЕНЯЕМ ИЗМЕНЕНИЯ
+addAccountsButton();
+
+console.log('✅ Система управления аккаунтами добавлена!');
+console.log('💡 Нажми Ctrl+Shift+A для быстрого открытия');
+console.log('👥 Кнопка "Аккаунты" появилась в меню');
