@@ -214,9 +214,275 @@ input:disabled{opacity:0.5;cursor:not-allowed}
 .hidden{display:none !important}
 @media(max-width:500px){.item{flex-wrap:wrap}.item-actions{width:100%;justify-content:flex-end;margin-top:6px}.media-grid{grid-template-columns:repeat(2,1fr)}.profile-row{flex-direction:column;align-items:flex-start}.setting{flex-direction:column;align-items:flex-start;gap:8px}.nav{grid-template-columns:repeat(4,1fr);gap:2px;padding:6px 4px;border-radius:18px}.nav button{font-size:9px;padding:6px 2px}.nav-icon{font-size:16px}.lock-box{padding:24px}}
 </style>
-</head>
+<style>
+        i[data-ic] {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 18px !important;
+            height: 18px !important;
+            flex: none !important;
+            font-size: 0 !important;
+            vertical-align: middle !important;
+            margin-right: 6px !important;
+            color: var(--brass, #c9a24e) !important;
+            opacity: 0.85;
+        }
+        i[data-ic] svg {
+            width: 18px !important;
+            height: 18px !important;
+            display: block !important;
+        }
+        .nav button i[data-ic] {
+            width: 20px !important;
+            height: 20px !important;
+            margin-right: 0 !important;
+            margin-bottom: 2px !important;
+            color: var(--graphite, #8b94a3) !important;
+        }
+        .nav button i[data-ic] svg {
+            width: 20px !important;
+            height: 20px !important;
+        }
+        .nav button.active i[data-ic] {
+            color: var(--brass, #c9a24e) !important;
+        }
+        .section-head h2 i[data-ic] {
+            width: 22px !important;
+            height: 22px !important;
+            margin-right: 8px !important;
+            color: var(--brass, #c9a24e) !important;
+        }
+        .section-head h2 i[data-ic] svg {
+            width: 22px !important;
+            height: 22px !important;
+        }
+        .small i[data-ic], .secondary i[data-ic], .danger-btn i[data-ic], .success-btn i[data-ic] {
+            width: 15px !important;
+            height: 15px !important;
+            margin-right: 5px !important;
+        }
+        .small i[data-ic] svg, .secondary i[data-ic] svg, .danger-btn i[data-ic] svg, .success-btn i[data-ic] svg {
+            width: 15px !important;
+            height: 15px !important;
+        }
+        .card-icon i[data-ic] {
+            width: 26px !important;
+            height: 26px !important;
+            margin-right: 0 !important;
+            color: var(--brass, #c9a24e) !important;
+        }
+        .card-icon i[data-ic] svg {
+            width: 26px !important;
+            height: 26px !important;
+        }
+        .setting-label i[data-ic] {
+            width: 18px !important;
+            height: 18px !important;
+            margin-right: 8px !important;
+            color: var(--brass, #c9a24e) !important;
+        }
+        .setting-label i[data-ic] svg {
+            width: 18px !important;
+            height: 18px !important;
+        }
+        .primary i[data-ic] {
+            color: #16120a !important;
+        }
+        .light .primary i[data-ic] {
+            color: #fff !important;
+        }
+        .primary i[data-ic] svg {
+            stroke-width: 2.2 !important;
+        }
+        .item-actions i[data-ic] {
+            width: 16px !important;
+            height: 16px !important;
+            margin-right: 0 !important;
+        }
+        .item-actions i[data-ic] svg {
+            width: 16px !important;
+            height: 16px !important;
+        }
+        .modal-head h2 i[data-ic] {
+            width: 20px !important;
+            height: 20px !important;
+            margin-right: 8px !important;
+            color: var(--brass, #c9a24e) !important;
+        }
+        .modal-head h2 i[data-ic] svg {
+            width: 20px !important;
+            height: 20px !important;
+        }
+        .upload-zone .icon i[data-ic] {
+            width: 32px !important;
+            height: 32px !important;
+            margin-right: 0 !important;
+            color: var(--brass, #c9a24e) !important;
+        }
+        .upload-zone .icon i[data-ic] svg {
+            width: 32px !important;
+            height: 32px !important;
+        }
+        .file-label .icon i[data-ic] {
+            width: 20px !important;
+            height: 20px !important;
+            margin-right: 6px !important;
+            color: var(--brass, #c9a24e) !important;
+        }
+        .file-label .icon i[data-ic] svg {
+            width: 20px !important;
+            height: 20px !important;
+        }
+        .empty .icon i[data-ic] {
+            width: 36px !important;
+            height: 36px !important;
+            margin-right: 0 !important;
+            color: var(--etch-hi, #333b49) !important;
+        }
+        .empty .icon i[data-ic] svg {
+            width: 36px !important;
+            height: 36px !important;
+        }
+        .nav-icon i[data-ic] {
+            display: flex !important;
+        }
+    </style><style>
+        i[data-ic] {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 18px !important;
+            height: 18px !important;
+            flex: none !important;
+            font-size: 0 !important;
+            vertical-align: middle !important;
+            margin-right: 6px !important;
+            color: var(--brass, #c9a24e) !important;
+            opacity: 0.85;
+        }
+        i[data-ic] svg {
+            width: 18px !important;
+            height: 18px !important;
+            display: block !important;
+        }
+        .nav button i[data-ic] {
+            width: 20px !important;
+            height: 20px !important;
+            margin-right: 0 !important;
+            margin-bottom: 2px !important;
+            color: var(--graphite, #8b94a3) !important;
+        }
+        .nav button i[data-ic] svg {
+            width: 20px !important;
+            height: 20px !important;
+        }
+        .nav button.active i[data-ic] {
+            color: var(--brass, #c9a24e) !important;
+        }
+        .section-head h2 i[data-ic] {
+            width: 22px !important;
+            height: 22px !important;
+            margin-right: 8px !important;
+            color: var(--brass, #c9a24e) !important;
+        }
+        .section-head h2 i[data-ic] svg {
+            width: 22px !important;
+            height: 22px !important;
+        }
+        .small i[data-ic], .secondary i[data-ic], .danger-btn i[data-ic], .success-btn i[data-ic] {
+            width: 15px !important;
+            height: 15px !important;
+            margin-right: 5px !important;
+        }
+        .small i[data-ic] svg, .secondary i[data-ic] svg, .danger-btn i[data-ic] svg, .success-btn i[data-ic] svg {
+            width: 15px !important;
+            height: 15px !important;
+        }
+        .card-icon i[data-ic] {
+            width: 26px !important;
+            height: 26px !important;
+            margin-right: 0 !important;
+            color: var(--brass, #c9a24e) !important;
+        }
+        .card-icon i[data-ic] svg {
+            width: 26px !important;
+            height: 26px !important;
+        }
+        .setting-label i[data-ic] {
+            width: 18px !important;
+            height: 18px !important;
+            margin-right: 8px !important;
+            color: var(--brass, #c9a24e) !important;
+        }
+        .setting-label i[data-ic] svg {
+            width: 18px !important;
+            height: 18px !important;
+        }
+        .primary i[data-ic] {
+            color: #16120a !important;
+        }
+        .light .primary i[data-ic] {
+            color: #fff !important;
+        }
+        .primary i[data-ic] svg {
+            stroke-width: 2.2 !important;
+        }
+        .item-actions i[data-ic] {
+            width: 16px !important;
+            height: 16px !important;
+            margin-right: 0 !important;
+        }
+        .item-actions i[data-ic] svg {
+            width: 16px !important;
+            height: 16px !important;
+        }
+        .modal-head h2 i[data-ic] {
+            width: 20px !important;
+            height: 20px !important;
+            margin-right: 8px !important;
+            color: var(--brass, #c9a24e) !important;
+        }
+        .modal-head h2 i[data-ic] svg {
+            width: 20px !important;
+            height: 20px !important;
+        }
+        .upload-zone .icon i[data-ic] {
+            width: 32px !important;
+            height: 32px !important;
+            margin-right: 0 !important;
+            color: var(--brass, #c9a24e) !important;
+        }
+        .upload-zone .icon i[data-ic] svg {
+            width: 32px !important;
+            height: 32px !important;
+        }
+        .file-label .icon i[data-ic] {
+            width: 20px !important;
+            height: 20px !important;
+            margin-right: 6px !important;
+            color: var(--brass, #c9a24e) !important;
+        }
+        .file-label .icon i[data-ic] svg {
+            width: 20px !important;
+            height: 20px !important;
+        }
+        .empty .icon i[data-ic] {
+            width: 36px !important;
+            height: 36px !important;
+            margin-right: 0 !important;
+            color: var(--etch-hi, #333b49) !important;
+        }
+        .empty .icon i[data-ic] svg {
+            width: 36px !important;
+            height: 36px !important;
+        }
+        .nav-icon i[data-ic] {
+            display: flex !important;
+        }
+    </style></head>
 <body>
-<div id="root"><main class="lock"><section class="lock-box"><div class="logo">🛡️</div><h1>Shield</h1><p class="muted">Войдите или создайте аккаунт</p><div class="field"><label>Имя пользователя</label><input id="username" type="text" placeholder="Минимум 2 символа" autocomplete="username" maxlength="50" inputmode="text"></div><div class="field"><label>Пароль (мин. 8)</label><div class="password-field"><input id="password" type="password" placeholder="Минимум 8" autocomplete="current-password" maxlength="100"><button class="password-toggle" onclick="togglePasswordVisibility('password')">👁️</button></div></div><div id="authError" class="error"></div><div id="authSuccess" class="success"></div><button id="loginBtn" class="primary">🔓 Войти</button><button id="registerBtn" class="primary" style="margin-top:10px;background:linear-gradient(135deg,#4a5a8a,#2a3a6a)">🔐 Создать аккаунт</button><button id="recoverBtn" class="secondary" style="width:100%;margin-top:10px;background:transparent;border:1px solid var(--border);">🔑 Забыли пароль?</button><div class="security">🛡️ AES-256<br>💾 Зашифрованное IndexedDB-хранилище<br>🔒 Блокировка при смене вкладки<br>📦 Регулярно делайте бэкап</div></section></main></div>
+<div id="root"><main class="app"><header class="top"><h1>🛡️ Shield</h1><button id="lockBtn" class="icon-button lock-btn"><i data-ic="exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14.6 4.4h3.6a1.6 1.6 0 0 1 1.6 1.6v12a1.6 1.6 0 0 1-1.6 1.6h-3.6"></path><path d="m9.6 8-4 4 4 4M5.6 12h9.4"></path></svg></i></button></header><div id="content" class="fade-in" style="display: block; visibility: visible; min-height: 220px;"><div class="cards"><div class="card"><div class="card-icon">🔑</div><div class="card-title">Пароли</div><div class="card-count">0</div></div><div class="card"><div class="card-icon">🔗</div><div class="card-title">Ссылки</div><div class="card-count">0</div></div><div class="card"><div class="card-icon">🖼</div><div class="card-title">Медиа</div><div class="card-count">0 файлов</div></div><div class="card"><div class="card-icon">📁</div><div class="card-title">Файлы</div><div class="card-count">0 файлов</div></div></div><div class="setting" style="border-color:var(--accent1);background:var(--hover);margin-top:16px"><span style="font-weight:600">🛡️ Shield готов</span><span style="color:var(--text2);font-size:13px">🔒 AES-256 шифрование • 💾 Резервное копирование • 🔒 Блокировка вкладки</span></div></div><nav class="nav"><button data-section="home" class="active"><span class="nav-icon"><i data-ic="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.6 10.6 12 3.9l8.4 6.7v8.6a1.2 1.2 0 0 1-1.2 1.2H4.8a1.2 1.2 0 0 1-1.2-1.2z"></path></svg></i></span>Главная</button><button data-section="passwords" class=""><span class="nav-icon"><i data-ic="key"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2.8 4.6 6v6.2c0 4.6 3 8.3 7.4 10.2 4.4-1.9 7.4-5.6 7.4-10.2V6z"></path><path d="m8.8 12.2 2.4 2.4 4.4-4.6"></path></svg></i></span>Пароли</button><button data-section="links" class=""><span class="nav-icon"><i data-ic="link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9.6 14.4 14.4 9.6"></path><path d="m11.2 6.6 2.3-2.3a3.6 3.6 0 0 1 5.1 5.1l-2.3 2.3"></path><path d="m12.8 17.4-2.3 2.3a3.6 3.6 0 0 1-5.1-5.1l2.3-2.3"></path></svg></i></span>Ссылки</button><button data-section="media" class=""><span class="nav-icon"><i data-ic="image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3.2" y="4.4" width="17.6" height="15.2" rx="2.2"></rect><circle cx="8.6" cy="9.4" r="1.5"></circle><path d="m4.2 17.4 4.8-4.8 3.6 3.6 2.8-2.8 4.4 4.4"></path></svg></i></span>Медиа</button><button data-section="files" class=""><span class="nav-icon"><i data-ic="folder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.2 7.4A1.6 1.6 0 0 1 4.8 5.8h4l2 2.4h8.4a1.6 1.6 0 0 1 1.6 1.6v8.6a1.6 1.6 0 0 1-1.6 1.6H4.8a1.6 1.6 0 0 1-1.6-1.6z"></path><path d="M13.2 8.2h4.2"></path></svg></i></span>Файлы</button><button data-section="profile" class=""><span class="nav-icon"><i data-ic="user"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8.2" r="3.6"></circle><path d="M4.8 20.2c1-3.5 3.8-5.2 7.2-5.2s6.2 1.7 7.2 5.2"></path></svg></i></span>Профиль</button><button data-section="settings" class=""><span class="nav-icon"><i data-ic="sliders"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 7h8M17 7h3M4 12h3M12 12h8M4 17h8M17 17h3"></path><circle cx="14.5" cy="7" r="2.1"></circle><circle cx="9.5" cy="12" r="2.1"></circle><circle cx="14.5" cy="17" r="2.1"></circle></svg></i></span>Настройки</button></nav></main></div>
 <script>
 "use strict";
 
