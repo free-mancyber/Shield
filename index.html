@@ -1,4 +1,6 @@
-<html lang="ru"><head>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Shield</title>
@@ -216,7 +218,7 @@ input:disabled{opacity:0.5;cursor:not-allowed}
 </style>
 </head>
 <body>
-<div id="root"><main class="lock"><section class="lock-box"><div class="logo">🛡️</div><h1>Shield</h1><p class="muted">Войдите или создайте аккаунт</p><div class="field"><label>Имя пользователя</label><input id="username" type="text" placeholder="Минимум 2 символа" autocomplete="username" maxlength="50" inputmode="text"></div><div class="field"><label>Пароль (мин. 8)</label><div class="password-field"><input id="password" type="password" placeholder="Минимум 8" autocomplete="current-password" maxlength="100"><button class="password-toggle" onclick="togglePasswordVisibility('password')">👁️</button></div></div><div id="authError" class="error"></div><div id="authSuccess" class="success"></div><button id="loginBtn" class="primary">🔓 Войти</button><button id="registerBtn" class="primary" style="margin-top:10px;background:linear-gradient(135deg,#4a5a8a,#2a3a6a)">🔐 Создать аккаунт</button><button id="recoverBtn" class="secondary" style="width:100%;margin-top:10px;background:transparent;border:1px solid var(--border);">🔑 Забыли пароль?</button><div class="security">🛡️ AES-256<br>💾 Зашифрованное IndexedDB-хранилище<br>🔒 Блокировка при смене вкладки<br>📦 Регулярно делайте бэкап</div></section></main></div>
+<div id="root"></div>
 <script>
 "use strict";
 
@@ -338,7 +340,30 @@ class YandexDisk{
         return false;
     }
     async saveData(data){const token=this.getToken();if(!token)throw new Error('Не авторизован');try{const uploadResponse=await fetch(this.baseUrl+'/resources/upload?path='+encodeURIComponent(this.FILE_PATH)+'&overwrite=true',{headers:{'Authorization':'OAuth '+token}});if(!uploadResponse.ok){if(uploadResponse.status===404){const create=await fetch(this.baseUrl+'/resources?path='+encodeURIComponent(this.FILE_PATH),{method:'PUT',headers:{'Authorization':'OAuth '+token}});if(!create.ok&&create.status!==409)throw new Error('Не удалось создать файл');const retryResponse=await fetch(this.baseUrl+'/resources/upload?path='+encodeURIComponent(this.FILE_PATH)+'&overwrite=true',{headers:{'Authorization':'OAuth '+token}});if(!retryResponse.ok)throw new Error('Не удалось получить URL загрузки');const retryData=await retryResponse.json();const put=await fetch(retryData.href,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});if(!put.ok)throw new Error('Ошибка записи в Яндекс.Диск');return true}throw new Error('Ошибка загрузки: '+uploadResponse.status)}const uploadData=await uploadResponse.json();const put=await fetch(uploadData.href,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});if(!put.ok)throw new Error('Ошибка записи в Яндекс.Диск');return true}catch(e){console.error(e);throw e}}
-    async loadData(){const token=this.getToken();if(!token)throw new Error('Не авторизован');try{const downloadResponse=await fetch(this.baseUrl+'/resources/download?path='+encodeURIComponent(this.FILE_PATH),{headers:{'Authorization':'OAuth '+token}});if(downloadResponse.status===404)return null;if(!downloadResponse.ok)throw new Error('Ошибка загрузки: '+downloadResponse.status);const downloadData=await downloadResponse.json();const dataResponse=await fetch(downloadData.href);if(!dataResponse.ok)throw new Error('Ошибка чтения файла');return await dataResponse.json()}catch(e){console.error(e);throw e}}
+    async loadData(){
+        const token=this.getToken();
+        if(!token)throw new Error('Не авторизован');
+        try{
+            const url=this.baseUrl+'/resources/download?path='+encodeURIComponent(this.FILE_PATH);
+            const downloadResponse=await fetch(url,{method:'GET',headers:{'Authorization':'OAuth '+token,'Accept':'application/json'}});
+            if(downloadResponse.status===404)return null;
+            if(downloadResponse.status===403){
+                throw new Error('Яндекс.Диск: доступ запрещён (403). Проверьте права токена и доступ приложения к Диску.');
+            }
+            if(downloadResponse.status===401){
+                throw new Error('Яндекс.Диск: токен недействителен или истёк (401).');
+            }
+            if(!downloadResponse.ok)throw new Error('Ошибка загрузки: '+downloadResponse.status);
+            const downloadData=await downloadResponse.json();
+            if(!downloadData?.href)throw new Error('Яндекс.Диск не вернул ссылку на файл');
+            const dataResponse=await fetch(downloadData.href,{method:'GET'});
+            if(dataResponse.status===404)return null;
+            if(!dataResponse.ok)throw new Error('Ошибка чтения файла: '+dataResponse.status);
+            const text=await dataResponse.text();
+            if(!text.trim())return null;
+            try{return JSON.parse(text)}catch(_){throw new Error('Файл shield_data.json повреждён или содержит неверный JSON');}
+        }catch(e){console.error('YandexDisk.loadData:',e);throw e}
+    }
     async disconnect(){this.token=null;sessionStorage.removeItem('shield_yandex_token')}
 }
 
